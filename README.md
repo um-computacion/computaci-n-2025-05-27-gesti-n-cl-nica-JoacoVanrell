@@ -38,7 +38,7 @@ En virtud de los estándares académicos establecidos y la importancia de manten
 
 # 🏥 Sistema de Gestión para una Clínica
 
-## Explicación de la Entrega-----------------------------------------------------------------------------------------------------------------
+## Explicación de la Entrega:
 
 Este proyecto implementa un sistema de gestión para una clínica médica, desarrollado en Python, con una interfaz de consola (CLI) para interactuar con el usuario.
 
