@@ -36,7 +36,160 @@ En virtud de los estándares académicos establecidos y la importancia de manten
 - Consulte cualquier duda con los docentes durante la clase de la semana próxima.
 - La implementación debe cumplir con todos los puntos especificados en la consigna.
 
+# 🏥 Sistema de Gestión para una Clínica
+
+## Explicación de la Entrega-----------------------------------------------------------------------------------------------------------------
+
+Este proyecto implementa un sistema de gestión para una clínica médica, desarrollado en Python, con una interfaz de consola (CLI) para interactuar con el usuario.
+
 ---
+
+### ¿Cómo ejecutar el sistema?
+
+#### Paso 1: Ingresar a la carpeta del proyecto
+
+Desde la terminal o CMD, posicionate en la raíz del proyecto:
+
+```bash
+cd C:\ruta\al\proyecto
+```
+
+####  Paso 2: Ejecutar el programa
+
+Corré el siguiente comando para iniciar el sistema:
+
+```bash
+python src/CLI.py
+```
+
+Esto abrirá un menú interactivo con las siguientes opciones:
+
+```text
+--- Menú Clínica ---
+1) Agregar paciente
+2) Agregar médico
+3) Agregar especialidad a médico
+4) Agendar turno
+5) Emitir receta
+6) Ver historia clínica
+7) Ver todos los turnos
+8) Ver todos los pacientes
+9) Ver todos los médicos
+0) Salir
+```
+
+---
+
+###  ¿Cómo ejecutar los tests?
+
+Desde la raíz del proyecto, ejecutá este comando:
+
+```bash
+python -m unittest
+```
+
+```text
+................................................................
+----------------------------------------------------------------------
+Ran 64 tests in 0.004s
+
+OK
+```
+
+## ¿Cómo usar el sistema? (Ejemplos)
+
+### Agregar un paciente
+
+Elegí la opción 1 en el menú y completá los datos:
+
+- **DNI**: 46161252  
+- **Nombre**: Joaquin Vanrell  
+- **Fecha de nacimiento**: 13/06/2005
+
+Formato requerido para la fecha: `dd/mm/aaaa`
+
+---
+
+### Agregar un médico
+
+Elegí la opción 2:
+
+- **Matrícula**: M-001  
+- **Nombre**: Dr. Juan Perez
+
+---
+
+### Agregar especialidad a un médico
+
+Opción 3:
+
+- **Matrícula del médico**: M-001  
+- **Especialidad**: Cardiologia  
+- **Días**: lunes, miercoles, viernes
+
+Los días deben ingresarse separados por comas. Ejemplo válido: `lunes, miercoles, viernes`
+
+---
+
+### Agendar un turno
+
+Opción 4:
+
+- **DNI paciente**: 46161252  
+- **Matrícula médico**: M-001  
+- **Fecha**: 17/06/2025  
+- **Hora**: 14:30  
+- **Especialidad**: Cardiologia
+
+La fecha debe estar en formato `dd/mm/aaaa` y la hora en formato `HH:MM`.  
+El sistema valida automáticamente si el médico atiende ese día y esa especialidad.
+
+---
+
+###  Emitir receta
+
+Opción 5:
+
+- **DNI paciente**: 46161252  
+- **Matrícula médico**: M-001  
+- **Medicamentos**: Ibuprofeno, Paracetamol
+
+Los medicamentos deben separarse con comas. El sistema guarda la receta junto a la fecha actual.
+
+---
+
+### Ver historia clínica
+
+Opción 6: Ingresás el DNI de un paciente y el sistema te muestra todos los turnos y recetas emitidas.
+
+---
+
+## Estructura del proyecto
+
+```
+/src
+├── __init__.py
+├── Paciente.py
+├── Medico.py
+├── Especialidad.py
+├── Turno.py
+├── Receta.py
+├── HistoriaClinica.py
+├── Clinica.py
+└── CLI.py
+
+/tests
+├── __init__.py
+├── test_Paciente.py
+├── test_Medico.py
+├── test_Especialidad.py
+├── test_Turno.py
+├── test_Receta.py
+├── test_Historia.py
+└── test_Clinica.py
+```
+
+---      
 
 ## 📝 Consigna 
 

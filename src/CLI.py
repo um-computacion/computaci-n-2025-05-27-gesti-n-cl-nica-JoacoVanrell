@@ -1,13 +1,18 @@
 import os
-from datetime import datetime
-from src.Clinica import (Clinica, 
-                        PacienteNoEncontradoException, 
-                        MedicoNoDisponibleException, 
-                        TurnoOcupadoException, 
-                        RecetaInvalidaException)
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from src.Clinica import (
+    Clinica, 
+    PacienteNoEncontradoException, 
+    MedicoNoDisponibleException, 
+    TurnoOcupadoException, 
+    RecetaInvalidaException
+)
 from src.Paciente import Paciente
 from src.Medico import Medico
 from src.Especialidad import Especialidad
+from datetime import datetime
 
 
 def limpiar_pantalla():
@@ -15,8 +20,6 @@ def limpiar_pantalla():
 
 def pausar():
     input("\nPresione ENTER para continuar...")
-
-
 
 class CLI:
     def __init__(self):
@@ -63,7 +66,7 @@ class CLI:
                 elif opc == "9":
                     self._op_ver_medicos()
                 elif opc == "0":
-                    print("¡Hasta luego! Muchisimas gracias por usar el sistema.")
+                    print("¡Hasta luego! Muchas gracias por usar el sistema.")
                     break
                 else:
                     print("Opción inválida.")
@@ -92,22 +95,24 @@ class CLI:
 
     def _op_agregar_especialidad(self):
         mat = input("Matrícula del médico: ").strip()
-        # esto lanza MedicoNoDisponibleException si no existe
         medico = self.clinica.obtener_medico_por_matricula(mat)
-
         tipo = input("Tipo de especialidad: ").strip()
         dias = [d.strip() for d in input("Días (separados por coma): ").split(",")]
         esp = Especialidad(tipo, dias)
-
         medico.agregar_especialidad(esp)
         print("Especialidad agregada.")
-        
+
     def _op_agendar_turno(self):
         dni = input("DNI paciente: ").strip()
         mat = input("Matrícula médico: ").strip()
         fecha = input("Fecha (dd/mm/aaaa): ").strip()
         hora = input("Hora (HH:MM): ").strip()
-        dt = datetime.strptime(f"{fecha} {hora}", "%d/%m/%Y %H:%M")
+
+        try:
+            dt = datetime.strptime(f"{fecha} {hora}", "%d/%m/%Y %H:%M")
+        except ValueError:
+            print("Fecha u hora inválida. Usá el formato dd/mm/aaaa y HH:MM.")
+            return
         esp = input("Especialidad: ").strip()
         self.clinica.agendar_turno(dni, mat, dt, esp)
         print("Turno agendado.")
@@ -115,27 +120,38 @@ class CLI:
     def _op_emitir_receta(self):
         dni = input("DNI paciente: ").strip()
         mat = input("Matrícula médico: ").strip()
-        meds = [m.strip() for m in input("Medicamentos (coma): ").split(",") if m.strip()]
+        meds = [m.strip() for m in input("Medicamentos (separados por coma): ").split(",") if m.strip()]
         self.clinica.emitir_receta(dni, mat, meds)
         print("Receta emitida.")
 
     def _op_ver_historia(self):
         dni = input("DNI paciente: ").strip()
-        h = self.clinica.obtener_historia_clinica(dni)
-        print(h)
+        historia = self.clinica.obtener_historia_clinica_por_dni(dni)
+        print(historia)
 
     def _op_ver_turnos(self):
-        for t in self.clinica.obtener_turnos():
-            print(t)
+        turnos = self.clinica.obtener_turnos()
+        if not turnos:
+            print("No hay turnos agendados.")
+        else:
+            for t in turnos:
+                print(t)
 
     def _op_ver_pacientes(self):
-        for p in self.clinica.obtener_pacientes():
-            print(p)
+        pacientes = self.clinica.obtener_pacientes()
+        if not pacientes:
+            print("No hay pacientes registrados.")
+        else:
+            for p in pacientes:
+                print(p)
 
     def _op_ver_medicos(self):
-        for m in self.clinica.obtener_medicos():
-            print(m)
-
+        medicos = self.clinica.obtener_medicos()
+        if not medicos:
+            print("No hay médicos registrados.")
+        else:
+            for m in medicos:
+                print(m)
 
 if __name__ == "__main__":
     CLI().ejecutar()

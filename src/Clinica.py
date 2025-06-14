@@ -6,7 +6,6 @@ from src.Turno import Turno
 from src.Receta import Receta
 from src.HistoriaClinica import HistoriaClinica
 
-
 class PacienteNoEncontradoException(Exception):
     """Se lanza cuando un paciente no está registrado."""
     pass
@@ -25,96 +24,97 @@ class RecetaInvalidaException(Exception):
 
 class Clinica:
     def __init__(self):
-        self.__pacientes__: dict[str, Paciente] = {}
-        self.__medicos__:   dict[str, Medico]   = {}
-        self.__turnos__:    List[Turno]         = []
-        self.__historias__: dict[str, HistoriaClinica] = {}
+        self.__pacientes: dict[str, Paciente] = {}
+        self.__medicos: dict[str, Medico] = {}
+        self.__turnos: List[Turno] = []
+        self.__historias: dict[str, HistoriaClinica] = {}
 
-    # — Validaciones auxiliares —
+
     def validar_existencia_paciente(self, dni: str):
-        if dni not in self.__pacientes__:
+        if dni not in self.__pacientes:
             raise PacienteNoEncontradoException(f"Paciente {dni} no registrado.")
 
-    def validar_existencia_medico(self, mat: str):
-        if mat not in self.__medicos__:
-            raise MedicoNoDisponibleException(f"Médico {mat} no registrado.")
+    def validar_existencia_medico(self, matricula: str):
+        if matricula not in self.__medicos:
+            raise MedicoNoDisponibleException(f"Médico {matricula} no registrado.")
 
-    def validar_turno_no_duplicado(self, mat: str, fecha_hora: datetime):
-        for t in self.__turnos__:
-            if (t.obtener_medico().obtener_matricula() == mat and 
-                t.obtener_fecha_hora() == fecha_hora):
-                raise TurnoOcupadoException(f"Turno ocupado: {mat} → {fecha_hora}")
+    def validar_turno_no_duplicado(self, matricula: str, fecha_hora: datetime):
+        for turno in self.__turnos:
+            if (turno.obtener_medico().obtener_matricula() == matricula and
+                turno.obtener_fecha_hora() == fecha_hora):
+                raise TurnoOcupadoException(f"Turno ocupado: {matricula} → {fecha_hora}")
 
     @staticmethod
     def obtener_dia_semana_en_espanol(fecha_hora: datetime) -> str:
         dias = {
-            "Monday":"lunes","Tuesday":"martes","Wednesday":"miércoles",
-            "Thursday":"jueves","Friday":"viernes","Saturday":"sábado",
-            "Sunday":"domingo"
+            "Monday": "lunes", "Tuesday": "martes", "Wednesday": "miércoles",
+            "Thursday": "jueves", "Friday": "viernes",
+            "Saturday": "sábado", "Sunday": "domingo"
         }
         return dias[fecha_hora.strftime("%A")]
 
-    def obtener_especialidad_disponible(self, medico: Medico, dia_sem: str) -> Optional[str]:
-        return medico.obtener_especialidad_para_dia(dia_sem)
-    
-    def obtener_medico_por_matricula(self, matricula: str) -> Medico:
-            """Devuelve el Medico si existe, o lanza MedicoNoDisponibleException."""
-            self.validar_existencia_medico(matricula)
-            return self.__medicos__[matricula]
+    def obtener_especialidad_disponible(self, medico: Medico, dia_semana: str) -> Optional[str]:
+        return medico.obtener_especialidad_para_dia(dia_semana)
 
-    def validar_especialidad_en_dia(self, medico: Medico, esp: str, dia_sem: str):
-        disp = self.obtener_especialidad_disponible(medico, dia_sem)
-        if disp is None or disp.lower() != esp.lower():
+    def validar_especialidad_en_dia(self, medico: Medico, especialidad: str, dia_semana: str):
+        disponible = self.obtener_especialidad_disponible(medico, dia_semana)
+        if disponible is None or disponible.lower() != especialidad.lower():
             raise MedicoNoDisponibleException(
-                f"{medico.obtener_matricula()} no atiende {esp} los {dia_sem}"
+                f"{medico.obtener_matricula()} no atiende {especialidad} los {dia_semana}"
             )
 
-    # — Operaciones públicas —
+    def obtener_medico_por_matricula(self, matricula: str) -> Medico:
+        self.validar_existencia_medico(matricula)
+        return self.__medicos[matricula]
+
+    def obtener_historia_clinica_por_dni(self, dni: str) -> HistoriaClinica:
+        self.validar_existencia_paciente(dni)
+        return self.__historias[dni]
+
+
     def agregar_paciente(self, paciente: Paciente):
-        if paciente.obtener_dni() in self.__pacientes__:
-            raise ValueError(f"Ya existe paciente {paciente.obtener_dni()}.")
-        self.__pacientes__[paciente.obtener_dni()] = paciente
-        self.__historias__[paciente.obtener_dni()] = HistoriaClinica(paciente)
+        dni = paciente.obtener_dni()
+        if dni in self.__pacientes:
+            raise ValueError(f"Ya existe paciente {dni}.")
+        self.__pacientes[dni] = paciente
+        self.__historias[dni] = HistoriaClinica(paciente)
 
     def agregar_medico(self, medico: Medico):
-        if medico.obtener_matricula() in self.__medicos__:
-            raise ValueError(f"Ya existe médico {medico.obtener_matricula()}.")
-        self.__medicos__[medico.obtener_matricula()] = medico
+        matricula = medico.obtener_matricula()
+        if matricula in self.__medicos:
+            raise ValueError(f"Ya existe médico {matricula}.")
+        self.__medicos[matricula] = medico
 
-    def agendar_turno(self, dni: str, mat: str, fecha_hora: datetime, esp: str):
+    def agendar_turno(self, dni: str, matricula: str, fecha_hora: datetime, especialidad: str):
         self.validar_existencia_paciente(dni)
-        self.validar_existencia_medico(mat)
-        self.validar_turno_no_duplicado(mat, fecha_hora)
+        self.validar_existencia_medico(matricula)
+        self.validar_turno_no_duplicado(matricula, fecha_hora)
 
-        dia_sem = Clinica.obtener_dia_semana_en_espanol(fecha_hora)
-        medico = self.__medicos__[mat]
-        self.validar_especialidad_en_dia(medico, esp, dia_sem)
+        dia_semana = self.obtener_dia_semana_en_espanol(fecha_hora)
+        medico = self.__medicos[matricula]
+        self.validar_especialidad_en_dia(medico, especialidad, dia_semana)
 
-        paciente = self.__pacientes__[dni]
-        turno = Turno(paciente, medico, fecha_hora, esp)
-        self.__turnos__.append(turno)
-        self.__historias__[dni].agregar_turno(turno)
+        paciente = self.__pacientes[dni]
+        turno = Turno(paciente, medico, fecha_hora, especialidad)
+        self.__turnos.append(turno)
+        self.__historias[dni].agregar_turno(turno)
 
-    def emitir_receta(self, dni: str, mat: str, medicamentos: List[str]):
+    def emitir_receta(self, dni: str, matricula: str, medicamentos: List[str]):
         self.validar_existencia_paciente(dni)
-        self.validar_existencia_medico(mat)
+        self.validar_existencia_medico(matricula)
         if not medicamentos:
             raise RecetaInvalidaException("Debe indicar al menos un medicamento.")
-        paciente = self.__pacientes__[dni]
-        medico = self.__medicos__[mat]
-        now = datetime.now()
-        receta = Receta(paciente, medico, now, medicamentos)
-        self.__historias__[dni].agregar_receta(receta)
+
+        paciente = self.__pacientes[dni]
+        medico = self.__medicos[matricula]
+        receta = Receta(paciente, medico, medicamentos)  # ahora NO recibe fecha
+        self.__historias[dni].agregar_receta(receta)
 
     def obtener_pacientes(self) -> List[Paciente]:
-        return list(self.__pacientes__.values())
+        return list(self.__pacientes.values())
 
     def obtener_medicos(self) -> List[Medico]:
-        return list(self.__medicos__.values())
+        return list(self.__medicos.values())
 
     def obtener_turnos(self) -> List[Turno]:
-        return list(self.__turnos__)
-
-    def obtener_historia_clinica(self, dni: str) -> HistoriaClinica:
-        self.validar_existencia_paciente(dni)
-        return self.__historias__[dni]
+        return list(self.__turnos)

@@ -7,24 +7,24 @@ from src.Receta import Receta
 
 class HistoriaClinica:
     def __init__(self, paciente: Paciente):
-        self.__paciente__: Paciente = paciente
-        self.__turnos__: List[Turno] = []
-        self.__recetas__: List[Receta] = []
+        self.__paciente: Paciente = paciente
+        self.__turnos: List[Turno] = []
+        self.__recetas: List[Receta] = []
 
     def agregar_turno(self, turno: Turno):
-        self.__turnos__.append(turno)
+        self.__turnos.append(turno)
 
     def agregar_receta(self, receta: Receta):
-        self.__recetas__.append(receta)
+        self.__recetas.append(receta)
 
     def obtener_turnos(self) -> List[Turno]:
-        return list(self.__turnos__)
+        return list(self.__turnos)
 
     def obtener_recetas(self) -> List[Receta]:
-        return list(self.__recetas__)
+        return list(self.__recetas)
 
     def __str__(self) -> str:
-        t = "\n".join(str(x) for x in self.__turnos__) or "—"
-        r = "\n".join(str(x) for x in self.__recetas__) or "—"
-        return (f"Historia de {self.__paciente__.obtener_dni()}:\n"
+        t = "\n".join(str(x) for x in self.__turnos) or "—"
+        r = "\n".join(str(x) for x in self.__recetas) or "—"
+        return (f"Historia de {self.__paciente.obtener_dni()}:\n"
                 f"TURNOS:\n{t}\nRECETAS:\n{r}")

@@ -1,21 +1,36 @@
 from datetime import datetime
-from typing import List
 from src.Paciente import Paciente
 from src.Medico import Medico
-from src.Clinica import RecetaInvalidaException
 
+class RecetaInvalidaException(Exception):
+    """Se lanza cuando se intenta emitir una receta sin medicamentos."""
+    pass
 
 class Receta:
-    def __init__(self, paciente: Paciente, medico: Medico, fecha_hora: datetime, medicamentos: List[str]):
+    def __init__(self, paciente: Paciente, medico: Medico, medicamentos: list[str]):
         if not medicamentos:
-            raise RecetaInvalidaException("La lista de medicamentos no puede estar vacía.")
-        self.__paciente__: Paciente = paciente
-        self.__medico__: Medico = medico
-        self.__fecha_hora__: datetime = fecha_hora
-        self.__medicamentos__: List[str] = medicamentos
+            raise RecetaInvalidaException("Debe indicar al menos un medicamento.")
+        self.__paciente = paciente
+        self.__medico = medico
+        self.__medicamentos = medicamentos
+        self.__fecha = datetime.now()
 
     def __str__(self) -> str:
-        f = self.__fecha_hora__.strftime("%d/%m/%Y %H:%M")
-        meds = ", ".join(self.__medicamentos__)
-        return (f"Receta - {self.__paciente__.obtener_dni()} por "
-                f"{self.__medico__.obtener_matricula()} el {f}: {meds}")
+        f_str = self.__fecha.strftime("%d/%m/%Y %H:%M")
+        meds = ", ".join(self.__medicamentos)
+        return (
+            f"Receta - {self.__paciente.obtener_dni()} por "
+            f"{self.__medico.obtener_matricula()} el {f_str}: {meds}"
+        )
+
+    def obtener_paciente(self) -> Paciente:
+        return self.__paciente
+
+    def obtener_medico(self) -> Medico:
+        return self.__medico
+
+    def obtener_medicamentos(self) -> list[str]:
+        return self.__medicamentos
+
+    def obtener_fecha(self) -> datetime:
+        return self.__fecha
