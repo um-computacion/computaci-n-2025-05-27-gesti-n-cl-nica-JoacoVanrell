@@ -37,7 +37,7 @@ class TestMedico(unittest.TestCase):
             self.medico.agregar_especialidad(self.esp1)
 
     def test_especialidad_disponible_en_dia(self):
-        resultado = self.medico.obtener_especialidad_para_dia("Lunes")  # mayúscula
+        resultado = self.medico.obtener_especialidad_para_dia("Lunes") 
         self.assertEqual(resultado, "Dermatología")
 
     def test_especialidad_no_disponible_devuelve_none(self):

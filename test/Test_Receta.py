@@ -48,7 +48,7 @@ class TestReceta(unittest.TestCase):
         self.assertRegex(texto, rf"Receta - {self.paciente.obtener_dni()} por {self.medico.obtener_matricula()} el \d{{2}}/\d{{2}}/\d{{4}} \d{{2}}:\d{{2}}: X, Y")
 
     def test_lista_de_medicamentos_puede_ser_generica(self):
-        meds = [1, 2, 3]  # tipos distintos
+        meds = [1, 2, 3] 
         receta = Receta(self.paciente, self.medico, meds)
         self.assertEqual(receta.obtener_medicamentos(), meds)
 

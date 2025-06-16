@@ -12,19 +12,19 @@ class TestPaciente(unittest.TestCase):
 
     def test_fecha_formato_invalido_lanza_error(self):
         with self.assertRaises(ValueError):
-            Paciente("12345678", "Juan", "2004-12-22")  # Formato incorrecto
+            Paciente("12345678", "Juan", "2004-12-22")  
 
     def test_fecha_inexistente_lanza_error(self):
         with self.assertRaises(ValueError):
-            Paciente("123", "A", "31/02/2020")  # Febrero no tiene 31
+            Paciente("123", "A", "31/02/2020")  
 
     def test_fecha_sin_barras_lanza_error(self):
         with self.assertRaises(ValueError):
-            Paciente("123", "A", "22122004")  # Sin separadores
+            Paciente("123", "A", "22122004")  
 
-    def test_fecha_con_anio_corto_lanza_error(self):
+    def test_fecha_con_año_corto_lanza_error(self):
         with self.assertRaises(ValueError):
-            Paciente("123", "A", "01/01/99")  # Año con dos dígitos
+            Paciente("123", "A", "01/01/99")  
 
     def test_str_incluye_datos_correctos(self):
         paciente = Paciente("87654321", "Ana", "05/07/1995")

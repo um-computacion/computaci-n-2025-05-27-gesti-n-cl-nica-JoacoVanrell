@@ -107,7 +107,7 @@ class Clinica:
 
         paciente = self.__pacientes[dni]
         medico = self.__medicos[matricula]
-        receta = Receta(paciente, medico, medicamentos)  # ahora NO recibe fecha
+        receta = Receta(paciente, medico, medicamentos)
         self.__historias[dni].agregar_receta(receta)
 
     def obtener_pacientes(self) -> List[Paciente]:
