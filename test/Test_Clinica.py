@@ -72,6 +72,25 @@ class TestClinica(unittest.TestCase):
     def test_emitir_receta_sin_medicamentos_falla(self):
         with self.assertRaises(RecetaInvalidaException):
             self.clinica.emitir_receta("1111", "M-1", [])
+    
+    def test_agregar_paciente_none_lanza_error(self):
+        with self.assertRaises(ValueError):
+            self.clinica.agregar_paciente(None)
+    
+    def test_agregar_medico_none_lanza_error(self):
+        with self.assertRaises(ValueError):
+            self.clinica.agregar_medico(None)
+    
+    def test_emitir_receta_con_medicamentos_invalidos_lanza_error(self):
+        with self.assertRaises(RecetaInvalidaException):
+            self.clinica.emitir_receta("1111", "M-1", ["Aspirina", "  "])
+    
+    def test_agendar_turno_con_especialidad_mayuscula_funciona(self):
+        self.clinica.agendar_turno("1111", "M-1", self.fecha_lunes, "CARDIOLOGÍA")
+        self.assertEqual(len(self.clinica.obtener_turnos()), 1)
+
+
+
 
 
 if __name__ == "__main__":

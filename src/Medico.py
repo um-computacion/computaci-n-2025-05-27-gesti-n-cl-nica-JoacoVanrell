@@ -3,6 +3,11 @@ from src.Especialidad import Especialidad
 
 class Medico:
     def __init__(self, matricula: str, nombre: str, especialidades: Optional[List[Especialidad]] = None):
+        if not matricula.strip():
+            raise ValueError("La matrícula no puede estar vacía.")
+        if not nombre.strip():
+            raise ValueError("El nombre del médico no puede estar vacío.")
+        
         self.__matricula: str = matricula
         self.__nombre: str = nombre
         self.__especialidades: List[Especialidad] = especialidades or []

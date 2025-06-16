@@ -12,9 +12,13 @@ class HistoriaClinica:
         self.__recetas: List[Receta] = []
 
     def agregar_turno(self, turno: Turno):
+        if turno is None:
+            raise ValueError("El turno no puede ser None.")
         self.__turnos.append(turno)
 
     def agregar_receta(self, receta: Receta):
+        if receta is None:
+            raise ValueError("La receta no puede ser None.")
         self.__recetas.append(receta)
 
     def obtener_turnos(self) -> List[Turno]:

@@ -50,6 +50,21 @@ class TestMedico(unittest.TestCase):
         self.assertIn("M-200", texto)
         self.assertIn("Dermatología", texto)
         self.assertIn("Cardiología", texto)
+    
+    def test_matricula_vacia_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Medico("", "Dr. SinMatricula")
+
+    def test_nombre_vacio_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Medico("M-123", "")
+
+    def test_nombre_largo_en_str(self):
+        nombre = "Dr. María Elena González Navarro"
+        m = Medico("M-999", nombre)
+        self.assertIn(nombre, str(m))
+
+
 
 
 if __name__ == "__main__":

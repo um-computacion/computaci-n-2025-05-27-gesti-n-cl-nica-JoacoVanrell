@@ -51,6 +51,19 @@ class TestTurno(unittest.TestCase):
         turno_invalido = Turno(self.paciente, self.medico, "no es fecha", "General")
         with self.assertRaises(AttributeError):
             _ = str(turno_invalido)
+    
+    def test_turno_con_paciente_none_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Turno(None, self.medico, self.fecha_hora, "General")
+    
+    def test_turno_con_medico_none_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Turno(self.paciente, None, self.fecha_hora, "General")
+            
+    def test_turno_con_fecha_hora_none_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Turno(self.paciente, self.medico, None, "General")
+
 
 
 if __name__ == "__main__":

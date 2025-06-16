@@ -73,6 +73,8 @@ class Clinica:
 
 
     def agregar_paciente(self, paciente: Paciente):
+        if paciente is None:
+            raise ValueError("El paciente no puede ser None.")
         dni = paciente.obtener_dni()
         if dni in self.__pacientes:
             raise ValueError(f"Ya existe paciente {dni}.")
@@ -80,6 +82,8 @@ class Clinica:
         self.__historias[dni] = HistoriaClinica(paciente)
 
     def agregar_medico(self, medico: Medico):
+        if medico is None:
+            raise ValueError("El médico no puede ser None.")
         matricula = medico.obtener_matricula()
         if matricula in self.__medicos:
             raise ValueError(f"Ya existe médico {matricula}.")
@@ -102,7 +106,7 @@ class Clinica:
     def emitir_receta(self, dni: str, matricula: str, medicamentos: List[str]):
         self.validar_existencia_paciente(dni)
         self.validar_existencia_medico(matricula)
-        if not medicamentos:
+        if not medicamentos or any(not str(m).strip() for m in medicamentos):
             raise RecetaInvalidaException("Debe indicar al menos un medicamento.")
 
         paciente = self.__pacientes[dni]

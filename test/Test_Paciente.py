@@ -49,6 +49,31 @@ class TestPaciente(unittest.TestCase):
         fecha = "10/10/2010"
         paciente = Paciente("99999999", "Test", fecha)
         self.assertIn(fecha, str(paciente))
+    
+    def test_dni_vacio_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Paciente("", "Juan", "10/10/2000")
+
+
+    def test_dni_con_letras_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Paciente("ABC123", "Juan", "10/10/2000")
+
+
+    def test_nombre_vacio_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Paciente("12345678", "", "10/10/2000")
+
+
+    def test_mes_fuera_de_rango_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Paciente("12345678", "Juan", "10/13/2000")  # mes 13 no existe
+
+
+    def test_str_funciona_con_nombre_largo(self):
+        nombre = "María del Pilar González López"
+        p = Paciente("34567890", nombre, "15/05/1992")
+        self.assertIn(nombre, str(p))
 
 
 if __name__ == "__main__":

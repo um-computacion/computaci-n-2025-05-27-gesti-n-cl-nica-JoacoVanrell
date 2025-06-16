@@ -58,6 +58,22 @@ class TestEspecialidad(unittest.TestCase):
         for dia in dias:
             self.assertIn(dia, texto)
 
+    def test_tipo_vacio_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Especialidad("", ["lunes"])
+    
+    def test_dias_con_valores_invalidos_lanza_error(self):
+        with self.assertRaises(ValueError):
+            Especialidad("Clínica", ["lunes", "   "])
+    
+    def test_nombre_largo_funciona(self):
+        nombre = "Medicina cardiovascular y metabólica infantil"
+        e = Especialidad(nombre, ["martes"])
+        self.assertEqual(e.obtener_especialidad(), nombre)
+
+
+
+
 
 if __name__ == "__main__":
     unittest.main()

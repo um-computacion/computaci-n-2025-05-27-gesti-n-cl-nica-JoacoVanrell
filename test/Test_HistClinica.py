@@ -66,6 +66,16 @@ class TestHistoriaClinica(unittest.TestCase):
         self.historia.agregar_turno(self.turno)
         texto = str(self.historia).split("TURNOS:")[1]
         self.assertIn("—", texto)
+    
+    def test_agregar_turno_none_lanza_error(self):
+        with self.assertRaises(ValueError):
+            self.historia.agregar_turno(None)
+    
+    def test_agregar_receta_none_lanza_error(self):
+        with self.assertRaises(ValueError):
+            self.historia.agregar_receta(None)
+
+
 
 
 if __name__ == "__main__":

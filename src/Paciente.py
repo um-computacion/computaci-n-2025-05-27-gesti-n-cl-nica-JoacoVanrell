@@ -2,6 +2,12 @@ from datetime import datetime
 
 class Paciente:
     def __init__(self, dni: str, nombre: str, fecha_nacimiento: str):
+        if not dni.strip().isdigit():
+            raise ValueError("El DNI debe ser un número no vacío.")
+
+        if not nombre.strip():
+            raise ValueError("El nombre no puede estar vacío.")
+
         try:
             datetime.strptime(fecha_nacimiento, "%d/%m/%Y")
         except ValueError:
